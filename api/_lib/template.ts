@@ -11,6 +11,13 @@ const rglr = readFileSync(`${__dirname}/../_fonts/Inter-Regular.woff2`).toString
 const bold = readFileSync(`${__dirname}/../_fonts/Inter-Bold.woff2`).toString('base64');
 const mono = readFileSync(`${__dirname}/../_fonts/Vera-Mono.woff2`).toString('base64');
 
+const baseUrl = {
+    development: process.env.WEBSITE_URL || 'http://localhost:3000',
+    production: `https://${process.env.VERCEL_URL}`,
+}[process.env.NODE_ENV === 'production' ? 'production' : 'development'];
+
+console.log(baseUrl)
+
 function getCss(theme: string, fontSize: string) {
     let background = 'white';
     let foreground = 'black';
@@ -134,8 +141,8 @@ export function getHtml(parsedReq: ParsedRequest) {
 function getImage(src: string, width ='auto', height = '225') {
     return `<img
         class="logo"
-        alt="Generated Image"
-        src="${sanitizeHtml(src)}"
+        alt="${baseUrl}${sanitizeHtml(src)}"
+        src="${baseUrl}${sanitizeHtml(src)}"
         width="${sanitizeHtml(width)}"
         height="${sanitizeHtml(height)}"
     />`
